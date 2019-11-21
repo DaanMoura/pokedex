@@ -1,5 +1,4 @@
 import React from 'react'
-import { Button } from 'nes-react';
 import './ClickArea.css';
 
 import PropTypes from 'prop-types'

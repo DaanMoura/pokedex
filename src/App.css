@@ -2,7 +2,10 @@
 
 body {
   font-family: 'Press Start 2P', cursive;
-  background-color: #ededed !important; 
+}
+
+img {
+  image-rendering: pixelated;
 }
 
 .App {
@@ -30,7 +33,6 @@ body {
 
 .content {
   width: 85%;
-  background-color: #fff;
 }
 
 footer {

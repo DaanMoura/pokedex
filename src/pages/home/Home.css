@@ -1,0 +1,14 @@
+.row {
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pokemon-card {
+    margin: 0.5rem;
+}
+
+.pokemons-container {
+    padding-top: 1rem;
+}
