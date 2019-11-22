@@ -79,23 +79,26 @@ const Pokemon = props => {
 					</Container>
 				</Col>
 			</Row>
-
-			<Container title="Evolution" className="evolution-container">
-				<Row around="lg">
-					{pokemon.evolution.map((p, index) => (
-						<>
-							{index > 0 ? <Col>=></Col> : <></>}
-							<Col>
-								<a href={`/pokemon/${p.id}`} className="link-pokemon">
-									<img src={p.img_url} />
-									<br />
-									{p.name}
-								</a>
-							</Col>
-						</>
-					))}
-				</Row>
-			</Container>
+			{pokemon.evolution.length > 1 ? (
+				<Container title="Evolution" className="evolution-container">
+					<Row around="lg">
+						{pokemon.evolution.map((p, index) => (
+							<>
+								{index > 0 ? <Col>=></Col> : <></>}
+								<Col>
+									<a href={`/pokemon/${p.id}`} className="link-pokemon">
+										<img src={p.img_url} />
+										<br />
+										{p.name}
+									</a>
+								</Col>
+							</>
+						))}
+					</Row>
+				</Container>
+			) : (
+				<></>
+			)}
 		</>
 	);
 };

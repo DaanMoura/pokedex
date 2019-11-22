@@ -3,26 +3,21 @@ import api from '../../services/api';
 async function fetchEvolution(url) {
     const response = await api.get(url);
     const chain = response.data['chain'];
-
     const evolution_chain = [];
 
     evolution_chain.push(chain['species']['name']);
 
     function getEvolutionChain(evolves_to) {
-
         if (evolves_to[0]['evolves_to'].length == 0) {
             evolution_chain.push(evolves_to[0]["species"]["name"]);
             return;
         };
 
         evolution_chain.push(evolves_to[0]["species"]["name"]);
-        
         getEvolutionChain(evolves_to[0]['evolves_to']);
     }
 
-    getEvolutionChain(chain.evolves_to);
-
-
+    if(chain.evolves_to.length > 0 ) getEvolutionChain(chain.evolves_to);
     return evolution_chain;
 }
 
