@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api';
 
 import './style.css';
 import Columns from 'react-columns';
 import { Row, Col } from 'react-flexbox-grid';
 import { TextInput, Button, Container } from 'nes-react';
 import ClickArea from '../../components/ClickArea';
+
+import fetchPokemons from './requests';
 
 import { Link } from 'react-router-dom';
 
@@ -18,19 +19,7 @@ const Home = ({history}) => {
 
 	useEffect(() => {
 		async function loadPokemons() {
-			const temp = [];
-			const begin = page * PAGE_SIZE + 1;
-			for (let i = begin; i < begin + PAGE_SIZE; i++) {
-				const response = await api.get(`/pokemon/${i}`);
-				const data = response.data;
-				temp.push({
-					id: i,
-					name: data['name'],
-					img_url: data['sprites']['front_default'],
-				});
-			}
-
-			setPokemons(temp);
+			setPokemons(await fetchPokemons(page));
 		}
 
 		loadPokemons();
