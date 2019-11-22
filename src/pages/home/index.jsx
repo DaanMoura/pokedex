@@ -3,6 +3,7 @@ import api from '../../services/api';
 
 import './Home.css';
 import Columns from 'react-columns';
+import { Row, Col } from 'react-flexbox-grid';
 import { TextInput, Button, Container } from 'nes-react';
 import ClickArea from '../../components/ClickArea';
 
@@ -10,9 +11,10 @@ import { Link } from 'react-router-dom';
 
 const PAGE_SIZE = 20;
 
-const Home = () => {
+const Home = ({history}) => {
 	const [page, setPage] = useState(0);
 	const [pokemons, setPokemons] = useState([]);
+	const [search, setSearch] = useState('');
 
 	useEffect(() => {
 		async function loadPokemons() {
@@ -54,6 +56,10 @@ const Home = () => {
 			);
 	}
 
+	const handleInput = (e) => setSearch(e.target.value);
+		
+	const handleSearch = () => history.push(`/pokemon/${search}`)
+
 	const queries = [
 		{
 			columns: 2,
@@ -71,8 +77,17 @@ const Home = () => {
 
 	return (
 		<>
-			<TextInput label="Search a pokémon:" placeholder="Ex.: Magikarp" />
-
+			Search for a pokémon:
+			<Row>
+				<Col lg={10}>
+					<TextInput placeholder="Ex.: Magikarp" onChange={handleInput} />
+				</Col>
+				<Col lg={2}>
+					<ClickArea onClick={handleSearch}>
+						<Button>Search!</Button>
+					</ClickArea>
+				</Col>
+			</Row>
 			<div className="pokemons-container">
 				<Columns queries={queries}>
 					{pokemons.map((pokemon, index) => (
@@ -84,7 +99,6 @@ const Home = () => {
 					))}
 				</Columns>
 			</div>
-
 			<div className="row">
 				{renderPageButton(true)}
 				{page + 1}

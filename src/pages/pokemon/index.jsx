@@ -2,7 +2,7 @@ import React, { Component, useState, useEffect } from 'react';
 import api from '../../services/api';
 
 import { Container, Progress } from 'nes-react';
-import { Grid, Row, Col } from 'react-flexbox-grid';
+import { Row, Col } from 'react-flexbox-grid';
 
 import './style.css';
 
@@ -27,7 +27,7 @@ const Pokemon = props => {
 			};
 
 			setPokemon({
-				id,
+				id: data['id'],
 				name: data['name'],
 				img_url: data['sprites']['front_default'],
 				abilities: _abilities,
