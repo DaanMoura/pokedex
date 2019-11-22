@@ -8,31 +8,55 @@ import './style.css';
 
 const Pokemon = props => {
 	const { id } = props.match.params;
-	const [pokemon, setPokemon] = useState({ id: 0, name: '', img_url: '', abilities: [{}], types: [{}], stats: {} });
+	const [pokemon, setPokemon] = useState({ 
+		id: 0, 
+		name: '', 
+		front_sprite: '',
+		back_sprite: '',
+		abilities: [{}], 
+		types: [{}], 
+		stats: {},
+		flavor_text: '',
+	 });
 
 	useEffect(() => {
 		async function loadPokemon() {
-			const response = await api.get(`/pokemon/${id}/`);
-			const data = response.data;
+			const pokemon_response = await api.get(`/pokemon/${id}/`);
+			const pokemon_data = pokemon_response.data;
 
-			const _types = data['types'].map(type => type['type']);
-			const _abilities = data['abilities'].map(ability => ability['ability']);
-			const _stats = {
-				speed: data['stats'][0]['base_stat'],
-				special_defense: data['stats'][1]['base_stat'],
-				special_attack: data['stats'][2]['base_stat'],
-				defense: data['stats'][3]['base_stat'],
-				attack: data['stats'][4]['base_stat'],
-				hp: data['stats'][5]['base_stat'],
+			const types = pokemon_data['types'].map(type => type['type']);
+			const abilities = pokemon_data['abilities'].map(ability => ability['ability']);
+			const stats = {
+				speed: pokemon_data['stats'][0]['base_stat'],
+				special_defense: pokemon_data['stats'][1]['base_stat'],
+				special_attack: pokemon_data['stats'][2]['base_stat'],
+				defense: pokemon_data['stats'][3]['base_stat'],
+				attack: pokemon_data['stats'][4]['base_stat'],
+				hp: pokemon_data['stats'][5]['base_stat'],
 			};
 
+			const specie_response = await api.get(`/pokemon-species/${pokemon_data['species']['name']}/`);
+			const specie_data = specie_response.data;
+
+			let flavor_text;
+
+			for(let i in specie_data['flavor_text_entries']) {
+				const entrie = specie_data['flavor_text_entries'][i]
+				if(entrie['language']['name'] == 'en') {
+					flavor_text = entrie['flavor_text'];
+					break;
+				}
+			}
+			
 			setPokemon({
-				id: data['id'],
-				name: data['name'],
-				img_url: data['sprites']['front_default'],
-				abilities: _abilities,
-				types: _types,
-				stats: _stats,
+				id: pokemon_data['id'],
+				name: pokemon_data['name'],
+				front_sprite: pokemon_data['sprites']['front_default'],
+				back_sprite: pokemon_data['sprites']['back_default'],
+				abilities,
+				types,
+				stats,
+				flavor_text,
 			});
 		}
 
@@ -44,9 +68,11 @@ const Pokemon = props => {
 			<h1>
 				#{pokemon.id} {pokemon.name}
 			</h1>
+			<p>{pokemon.flavor_text}</p>
 			<Row top='lg'>
 				<Col lg={4} md={4} sm={12}>
-					<img alt={`Imagem do ${pokemon.name}`} src={pokemon.img_url} className="pokemon-img" />
+					{ pokemon.front_sprite ? <img alt={`Front of ${pokemon.name}`} src={pokemon.front_sprite} className="pokemon-img" /> : <></> }
+					{ pokemon.back_sprite ? <img alt={`Back of ${pokemon.name}`} src={pokemon.back_sprite} className="pokemon-img" /> : <></> }
                     <Container title="Types" className='poke-container'>
                         <ul>
                             {pokemon.types.map(type => <li>{type.name}</li>)}
@@ -76,6 +102,7 @@ const Pokemon = props => {
 					</Container>
 				</Col>
 			</Row>
+			
 		</>
 	);
 };

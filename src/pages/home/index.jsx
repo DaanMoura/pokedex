@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 
-import './Home.css';
+import './style.css';
 import Columns from 'react-columns';
 import { Row, Col } from 'react-flexbox-grid';
 import { TextInput, Button, Container } from 'nes-react';
@@ -37,7 +37,7 @@ const Home = ({history}) => {
 	}, [page]);
 
 	function renderPageButton(isPrevious) {
-		const limit = Math.ceil(964 / PAGE_SIZE);
+		const limit = Math.ceil(807 / PAGE_SIZE);
 		if (isPrevious) {
 			return page === 0 ? (
 				<></>
