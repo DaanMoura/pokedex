@@ -18,6 +18,12 @@ img {
   padding: 2rem 0;
   display: flex;
   flex-flow: row;
+  color: #222;
+}
+
+.title:hover {
+  color: #444;
+  text-decoration: none;
 }
 
 .title h1 {

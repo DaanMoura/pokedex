@@ -1,0 +1,11 @@
+img {
+    transform: scale(2);
+}
+
+.pokemon-img {
+    padding: 1rem 2rem;
+}
+
+.poke-container {
+    margin: 2rem 0;
+}

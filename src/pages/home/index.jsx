@@ -6,6 +6,8 @@ import Columns from 'react-columns';
 import { TextInput, Button, Container } from 'nes-react';
 import ClickArea from '../../components/ClickArea';
 
+import { Link } from 'react-router-dom';
+
 const PAGE_SIZE = 20;
 
 const Home = () => {
@@ -74,9 +76,11 @@ const Home = () => {
 			<div className="pokemons-container">
 				<Columns queries={queries}>
 					{pokemons.map((pokemon, index) => (
-						<Container centered title={pokemon.name} key={index} className="pokemon-card">
-							<img src={pokemon.img_url} alt={`Imagem do ${pokemon.name}`} />
-						</Container>
+						<Link to={`/pokemon/${pokemon.id}`} className="link-pokemon">
+							<Container centered title={pokemon.name} key={index} className="pokemon-card">
+								<img src={pokemon.img_url} alt={`Imagem do ${pokemon.name}`} />
+							</Container>
+						</Link>
 					))}
 				</Columns>
 			</div>
