@@ -3,23 +3,53 @@ import React, { useEffect, useState } from 'react';
 import './style.css';
 import Columns from 'react-columns';
 import { Row, Col } from 'react-flexbox-grid';
-import { TextInput, Button, Container } from 'nes-react';
-import ClickArea from '../../components/ClickArea';
-
-import fetchPokemons from './requests';
-
 import { Link } from 'react-router-dom';
+import { TextInput, Button, Container, Checkbox } from 'nes-react';
+
+import ClickArea from '../../components/ClickArea';
+import { fetchPokemons, fetchTypePokemons } from './requests';
+import FilterButton from './FilterButton';
 
 const PAGE_SIZE = 20;
 
-const Home = ({history}) => {
+const Home = (props, { history }) => {
 	const [page, setPage] = useState(0);
 	const [pokemons, setPokemons] = useState([]);
 	const [search, setSearch] = useState('');
+	const [filterOpen, setFilterOpen] = useState(false);
+
+	const { type } = props.match.params;
+
+	const typeList = [
+		'normal',
+		'fire',
+		'water',
+		'electric',
+		'grass',
+		'ice',
+		'fighting',
+		'poison',
+		'ground',
+		'flying',
+		'psychic',
+		'bug',
+		'rock',
+		'ghost',
+		'dragon',
+		'dark',
+		'steel',
+		'fairy',
+	];
 
 	useEffect(() => {
 		async function loadPokemons() {
-			setPokemons(await fetchPokemons(page));
+			console.log(type);
+
+			if(type) {
+				setPokemons(await fetchTypePokemons(type,page))
+			} else {
+				setPokemons(await fetchPokemons(page));
+			}
 		}
 
 		loadPokemons();
@@ -45,9 +75,13 @@ const Home = ({history}) => {
 			);
 	}
 
-	const handleInput = (e) => setSearch(e.target.value);
-		
-	const handleSearch = () => history.push(`/pokemon/${search}`)
+	const handleInput = e => setSearch(e.target.value);
+
+	const handleSearch = () => history.push(`/pokemon/${search}`);
+
+	const handleSaved = () => console.log('saved');
+
+	const openFilters = () => setFilterOpen(!filterOpen);
 
 	const queries = [
 		{
@@ -64,19 +98,55 @@ const Home = ({history}) => {
 		},
 	];
 
+	const filterQueries = [
+		{
+			columns: 2,
+			query: 'min-width: 512px',
+		},
+		{
+			columns: 4,
+			query: 'min-width: 768px',
+		},
+		{
+			columns: 6,
+			query: 'min-width: 1024px',
+		},
+	];
+
 	return (
 		<>
-			Search for a pokémon:
 			<Row>
-				<Col lg={10}>
-					<TextInput placeholder="Ex.: Magikarp" onChange={handleInput} />
+				<Col lg={5}>
+					<TextInput placeholder="Search for a pokémon" onChange={handleInput} />
 				</Col>
 				<Col lg={2}>
 					<ClickArea onClick={handleSearch}>
 						<Button>Search!</Button>
 					</ClickArea>
 				</Col>
+				<Col lg={1} />
+				<Col lg={2}>
+					<ClickArea onClick={openFilters}>
+						<Button>Filter</Button>
+					</ClickArea>
+				</Col>
+				<Col lg={2}>
+					<ClickArea onClick={handleSaved}>
+						<Button>Saved</Button>
+					</ClickArea>
+				</Col>
 			</Row>
+
+			{filterOpen ? (
+				<Container title="Select a type">
+					<Columns queries={filterQueries}>
+						{typeList.map((type) => <FilterButton filter={type}/>)}
+					</Columns>
+				</Container>
+			) : (
+				<></>
+			)}
+
 			<div className="pokemons-container">
 				<Columns queries={queries}>
 					{pokemons.map((pokemon, index) => (
