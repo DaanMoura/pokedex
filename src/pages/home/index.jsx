@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { TextInput, Button, Container } from 'nes-react';
 
 import ClickArea from '../../components/ClickArea';
-import { fetchPokemons, fetchTypePokemons } from './requests';
+import { fetchPokemons, fetchTypePokemons, fetchPokemonSearch } from './requests';
 import { pokemonsQueries, filterQueries } from '../../shared/columnsQueries';
 import FilterButton from './FilterButton';
 
@@ -17,10 +17,10 @@ const PAGE_SIZE = 20;
 const Home = ({ history, match }) => {
 	const [page, setPage] = useState(0);
 	const [pokemons, setPokemons] = useState([]);
-	const [search, setSearch] = useState('');
+	const [searchInput, setSearchInput] = useState('');
 	const [filterOpen, setFilterOpen] = useState(false);
 
-	const { type } = match.params;
+	const { type, search } = match.params;
 
 	const typeList = [
 		'normal',
@@ -45,10 +45,11 @@ const Home = ({ history, match }) => {
 
 	useEffect(() => {
 		async function loadPokemons() {
-			console.log(type);
-
 			if (type) {
 				setPokemons(await fetchTypePokemons(type, page));
+			} else if (search) {
+				console.log('fsua');
+				setPokemons(await fetchPokemonSearch(search, page));
 			} else {
 				setPokemons(await fetchPokemons(page));
 			}
@@ -82,8 +83,7 @@ const Home = ({ history, match }) => {
 			);
 	}
 
-	const handleInput = e => setSearch(e.target.value);
-	const handleSearch = () => history.push(`/pokemon/${search}`);
+	const handleInput = e => setSearchInput(e.target.value);
 	const handleSaved = () => history.push(`/saved/`);
 	const openFilters = () => setFilterOpen(!filterOpen);
 
@@ -94,9 +94,9 @@ const Home = ({ history, match }) => {
 					<TextInput placeholder="Search for a pokémon" onChange={handleInput} />
 				</Col>
 				<Col lg={2}>
-					<ClickArea onClick={handleSearch}>
+					<a href={`/search/${searchInput}/`}>
 						<Button>Search!</Button>
-					</ClickArea>
+					</a>
 				</Col>
 				<Col lg={1} />
 				<Col lg={2}>
@@ -128,6 +128,10 @@ const Home = ({ history, match }) => {
 					<h2>
 						Showing <b>{type}</b> pokemons
 					</h2>
+				) : search ? (
+					<h2>
+						Showing results for <b>"{search}"</b>
+					</h2>
 				) : (
 					<h2>
 						Showing <b>all</b> pokemons
@@ -141,7 +145,7 @@ const Home = ({ history, match }) => {
 						{pokemons.map((pokemon, index) => (
 							<Link to={`/pokemon/${pokemon.name}`} className="link-pokemon">
 								<Container centered title={pokemon.name} key={index} className="pokemon-card">
-									<img src={pokemon.img_url} alt={`Imagem do ${pokemon.name}`} />
+									{ pokemon.img_url ? <img src={pokemon.img_url} alt={`Front of ${pokemon.name}`} /> : <p>no picture</p>}
 								</Container>
 							</Link>
 						))}

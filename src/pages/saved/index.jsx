@@ -28,7 +28,7 @@ const Saved = () => {
 						{pokemons.map((pokemon, index) => (
 							<Link to={`/pokemon/${pokemon.name}`} className="link-pokemon">
 								<Container centered title={pokemon.name} key={index} className="pokemon-card">
-									<img src={pokemon.front_sprite} alt={`Imagem do ${pokemon.name}`} />
+									<img src={pokemon.front_sprite} alt={`Front of ${pokemon.name}`} />
 								</Container>
 							</Link>
 						))}

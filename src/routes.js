@@ -10,6 +10,7 @@ export default Routes => {
             <Switch>
                 <Route path="/" exact component={Home} />
                 <Route path="/type/:type" component={Home}/>
+                <Route path="/search/:search" component={Home} />
                 <Route path="/pokemon/:id" component={Pokemon} />
                 <Route path="/saved/" component={Saved}/>
             </Switch>
