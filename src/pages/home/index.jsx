@@ -5,7 +5,7 @@ import '../../shared/style.css';
 import Columns from 'react-columns';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
-import { TextInput, Button, Container } from 'nes-react';
+import { TextInput, Button, Container, Checkbox } from 'nes-react';
 
 import ClickArea from '../../components/ClickArea';
 import { fetchPokemons, fetchTypePokemons, fetchPokemonSearch } from './requests';
@@ -19,6 +19,7 @@ const Home = ({ history, match }) => {
 	const [pokemons, setPokemons] = useState([]);
 	const [searchInput, setSearchInput] = useState('');
 	const [filterOpen, setFilterOpen] = useState(false);
+	const [strictSearch, setStrictSearch] = useState(false);
 
 	const { type, search } = match.params;
 
@@ -48,7 +49,6 @@ const Home = ({ history, match }) => {
 			if (type) {
 				setPokemons(await fetchTypePokemons(type, page));
 			} else if (search) {
-				console.log('fsua');
 				setPokemons(await fetchPokemonSearch(search, page));
 			} else {
 				setPokemons(await fetchPokemons(page));
@@ -94,7 +94,7 @@ const Home = ({ history, match }) => {
 					<TextInput placeholder="Search for a pokémon" onChange={handleInput} />
 				</Col>
 				<Col lg={2}>
-					<a href={`/search/${searchInput}/`}>
+					<a href={ strictSearch ? `/pokemon/${searchInput}` : `/search/${searchInput}` }>
 						<Button>Search!</Button>
 					</a>
 				</Col>
@@ -110,6 +110,11 @@ const Home = ({ history, match }) => {
 					</ClickArea>
 				</Col>
 			</Row>
+
+			<Checkbox checked={strictSearch}
+				label='Strict search'
+				onSelect={() => setStrictSearch(!strictSearch)}
+			/>
 
 			{filterOpen ? (
 				<Container title="Select a type">
