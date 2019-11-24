@@ -18,11 +18,3 @@
     transform: scale(2);
     transition: 0.2s;
 }
-
-.pokemon-card {
-    margin: 0.5rem;
-}
-
-.pokemons-container {
-    padding-top: 1rem;
-}

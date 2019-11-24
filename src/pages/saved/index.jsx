@@ -5,6 +5,7 @@ import { Container } from 'nes-react';
 
 import '../../shared/style.css';
 import { pokemonsQueries } from '../../shared/columnsQueries';
+import PokemonsContainer from '../../components/PokemonsContainer';
 
 const Saved = () => {
     const [pokemons,setPokemons] = useState([]);
@@ -22,21 +23,7 @@ const Saved = () => {
     return (
         <div>
             <h1>Your favorites pokémons</h1>
-            {pokemons.length > 0 ? (
-				<div className="pokemons-container">
-					<Columns queries={pokemonsQueries}>
-						{pokemons.map((pokemon, index) => (
-							<Link to={`/pokemon/${pokemon.name}`} className="link-pokemon">
-								<Container centered title={pokemon.name} key={index} className="pokemon-card">
-									<img src={pokemon.front_sprite} alt={`Front of ${pokemon.name}`} />
-								</Container>
-							</Link>
-						))}
-					</Columns>
-				</div>
-			) : (
-				<h2>Loading...</h2>
-			)}
+            <PokemonsContainer pokemons={pokemons}/>
         </div>
     )
 }

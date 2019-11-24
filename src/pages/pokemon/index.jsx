@@ -33,11 +33,14 @@ const Pokemon = props => {
 	}, []);
 
 	const savePokemon = () => {
-		localStorage.setItem(pokemon.name, JSON.stringify(pokemon));
+		localStorage.setItem(
+			pokemon.name,
+			JSON.stringify({ id: pokemon.id, name: pokemon.name, img_url: pokemon.front_sprite })
+		);
 		setPokemonSaved(true);
 		const saved_list_json = localStorage.getItem('saved_list');
 		let savedList = JSON.parse(saved_list_json);
-		if(!savedList) savedList = [];
+		if (!savedList) savedList = [];
 		savedList.push(pokemon.name);
 		localStorage.setItem('saved_list', JSON.stringify(savedList));
 	};
@@ -47,7 +50,7 @@ const Pokemon = props => {
 		setPokemonSaved(false);
 		const saved_list_json = localStorage.getItem('saved_list');
 		let savedList = JSON.parse(saved_list_json);
-		if(savedList) {
+		if (savedList) {
 			savedList = savedList.filter(e => e != pokemon.name);
 			localStorage.setItem('saved_list', JSON.stringify(savedList));
 		}
@@ -67,11 +70,11 @@ const Pokemon = props => {
 						<Col>
 							{pokemonSaved ? (
 								<ClickArea onClick={removePokemon}>
-									<Button>Remove</Button>
+									<Button>Unfavorite</Button>
 								</ClickArea>
 							) : (
 								<ClickArea onClick={savePokemon}>
-									<Button>Save</Button>
+									<Button>Favorite</Button>
 								</ClickArea>
 							)}
 						</Col>

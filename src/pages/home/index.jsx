@@ -4,13 +4,13 @@ import './style.css';
 import '../../shared/style.css';
 import Columns from 'react-columns';
 import { Row, Col } from 'react-flexbox-grid';
-import { Link } from 'react-router-dom';
 import { TextInput, Button, Container, Checkbox } from 'nes-react';
 
 import ClickArea from '../../components/ClickArea';
 import { fetchPokemons, fetchTypePokemons, fetchPokemonSearch } from './requests';
-import { pokemonsQueries, filterQueries } from '../../shared/columnsQueries';
+import { filterQueries } from '../../shared/columnsQueries';
 import FilterButton from './FilterButton';
+import PokemonsContainer from '../../components/PokemonsContainer';
 
 const PAGE_SIZE = 20;
 
@@ -89,32 +89,32 @@ const Home = ({ history, match }) => {
 
 	return (
 		<>
-			<Row>
+			<Row top="sm" between="md">
 				<Col lg={5}>
 					<TextInput placeholder="Search for a pokémon" onChange={handleInput} />
+					<Checkbox
+						checked={strictSearch}
+						label="Strict search"
+						onSelect={() => setStrictSearch(!strictSearch)}
+					/>
 				</Col>
-				<Col lg={2}>
-					<a href={ strictSearch ? `/pokemon/${searchInput}` : `/search/${searchInput}` }>
+				<Col>
+					<a href={strictSearch ? `/pokemon/${searchInput}` : `/search/${searchInput}`}>
 						<Button>Search!</Button>
 					</a>
 				</Col>
-				<Col lg={1} />
-				<Col lg={2}>
+				<Col lg={1}/>
+				<Col>
 					<ClickArea onClick={openFilters}>
 						<Button>Filter</Button>
 					</ClickArea>
 				</Col>
-				<Col lg={2}>
+				<Col>
 					<ClickArea onClick={handleSaved}>
-						<Button>Saved</Button>
+						<Button>Favorites</Button>
 					</ClickArea>
 				</Col>
 			</Row>
-
-			<Checkbox checked={strictSearch}
-				label='Strict search'
-				onSelect={() => setStrictSearch(!strictSearch)}
-			/>
 
 			{filterOpen ? (
 				<Container title="Select a type">
@@ -144,21 +144,8 @@ const Home = ({ history, match }) => {
 				)}
 			</div>
 
-			{pokemons.length > 0 ? (
-				<div className="pokemons-container">
-					<Columns queries={pokemonsQueries}>
-						{pokemons.map((pokemon, index) => (
-							<Link to={`/pokemon/${pokemon.name}`} className="link-pokemon">
-								<Container centered title={pokemon.name} key={index} className="pokemon-card">
-									{ pokemon.img_url ? <img src={pokemon.img_url} alt={`Front of ${pokemon.name}`} /> : <p>no picture</p>}
-								</Container>
-							</Link>
-						))}
-					</Columns>
-				</div>
-			) : (
-				<h2>Loading...</h2>
-			)}
+			<PokemonsContainer pokemons={pokemons} />
+
 			<div className="row">
 				{renderPageButton(true)}
 				{page + 1}
