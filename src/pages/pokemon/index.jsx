@@ -5,6 +5,7 @@ import { Row, Col } from 'react-flexbox-grid';
 
 import fetchPokemon from './requests';
 import './style.css';
+import '../../shared/style.css';
 import ClickArea from '../../components/ClickArea';
 
 const Pokemon = props => {
@@ -34,11 +35,22 @@ const Pokemon = props => {
 	const savePokemon = () => {
 		localStorage.setItem(pokemon.name, JSON.stringify(pokemon));
 		setPokemonSaved(true);
+		const saved_list_json = localStorage.getItem('saved_list');
+		let savedList = JSON.parse(saved_list_json);
+		if(!savedList) savedList = [];
+		savedList.push(pokemon.name);
+		localStorage.setItem('saved_list', JSON.stringify(savedList));
 	};
 
 	const removePokemon = () => {
 		localStorage.removeItem(pokemon.name);
 		setPokemonSaved(false);
+		const saved_list_json = localStorage.getItem('saved_list');
+		let savedList = JSON.parse(saved_list_json);
+		if(savedList) {
+			savedList = savedList.filter(e => e != pokemon.name);
+			localStorage.setItem('saved_list', JSON.stringify(savedList));
+		}
 	};
 
 	return (

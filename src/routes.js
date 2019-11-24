@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from './pages/home'
 import Pokemon from './pages/pokemon';
+import Saved from './pages/saved';
 
 export default Routes => {
     return (
@@ -10,6 +11,7 @@ export default Routes => {
                 <Route path="/" exact component={Home} />
                 <Route path="/type/:type" component={Home}/>
                 <Route path="/pokemon/:id" component={Pokemon} />
+                <Route path="/saved/" component={Saved}/>
             </Switch>
         </BrowserRouter>
     );

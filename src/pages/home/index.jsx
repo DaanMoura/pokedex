@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import './style.css';
+import '../../shared/style.css';
 import Columns from 'react-columns';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
@@ -8,7 +9,7 @@ import { TextInput, Button, Container } from 'nes-react';
 
 import ClickArea from '../../components/ClickArea';
 import { fetchPokemons, fetchTypePokemons } from './requests';
-import { pokemonsQueries, filterQueries } from './columnsQueries';
+import { pokemonsQueries, filterQueries } from '../../shared/columnsQueries';
 import FilterButton from './FilterButton';
 
 const PAGE_SIZE = 20;
@@ -83,7 +84,7 @@ const Home = ({ history, match }) => {
 
 	const handleInput = e => setSearch(e.target.value);
 	const handleSearch = () => history.push(`/pokemon/${search}`);
-	const handleSaved = () => console.log('saved');
+	const handleSaved = () => history.push(`/saved/`);
 	const openFilters = () => setFilterOpen(!filterOpen);
 
 	return (
