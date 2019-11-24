@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Container, Progress } from 'nes-react';
+import { Container, Progress, Button } from 'nes-react';
 import { Row, Col } from 'react-flexbox-grid';
 
 import fetchPokemon from './requests';
 import './style.css';
+import ClickArea from '../../components/ClickArea';
 
 const Pokemon = props => {
 	const { id } = props.match.params;
@@ -19,85 +20,127 @@ const Pokemon = props => {
 		flavor_text: '',
 		evolution: [],
 	});
+	const [pokemonSaved, setPokemonSaved] = useState(false);
 
 	useEffect(() => {
 		async function loadPokemon() {
 			const pokemon = await fetchPokemon(id);
 			setPokemon(pokemon);
+			setPokemonSaved(localStorage.getItem(pokemon.name));
 		}
 		loadPokemon();
 	}, []);
 
+	const savePokemon = () => {
+		localStorage.setItem(pokemon.name, JSON.stringify(pokemon));
+		setPokemonSaved(true);
+	};
+
+	const removePokemon = () => {
+		localStorage.removeItem(pokemon.name);
+		setPokemonSaved(false);
+	};
+
 	return (
 		<>
-			<h1>
-				#{pokemon.id} {pokemon.name}
-			</h1>
-			<p>{pokemon.flavor_text}</p>
-			<Row top="lg">
-				<Col lg={4} md={4} sm={12}>
-					{pokemon.front_sprite ? (
-						<img alt={`Front of ${pokemon.name}`} src={pokemon.front_sprite} className="pokemon-img" />
-					) : (
-						<></>
-					)}
-					{pokemon.back_sprite ? (
-						<img alt={`Back of ${pokemon.name}`} src={pokemon.back_sprite} className="pokemon-img" />
-					) : (
-						<></>
-					)}
-					<Container title="Types" className="poke-container">
-						<ul>
-							{pokemon.types.map(type => (
-								<li>{type.name}</li>
-							))}
-						</ul>
-					</Container>
+			{pokemon.id > 0 ? (
+				<div>
+					<Row between="md">
+						<Col>
+							<h1>
+								#{pokemon.id} {pokemon.name}
+							</h1>
+						</Col>
 
-					<Container title="Abilities" className="poke-container">
-						<ul>
-							{pokemon.abilities.map(ability => (
-								<li>{ability.name}</li>
-							))}
-						</ul>
-					</Container>
-				</Col>
-				<Col lg={8} md={5} sm={12}>
-					<Container title="Stats">
-						HP {pokemon.stats.hp}
-						<Progress value={pokemon.stats.hp} max={255} success />
-						Attack {pokemon.stats.attack}
-						<Progress value={pokemon.stats.attack} max={190} error />
-						Defense {pokemon.stats.defense}
-						<Progress value={pokemon.stats.defense} max={230} warning />
-						Special Attack {pokemon.stats.special_attack}
-						<Progress value={pokemon.stats.special_attack} max={194} error />
-						Special Defense {pokemon.stats.special_defense}
-						<Progress value={pokemon.stats.special_defense} max={230} warning />
-						Speed {pokemon.stats.speed}
-						<Progress value={pokemon.stats.speed} max={180} primary />
-					</Container>
-				</Col>
-			</Row>
-			{pokemon.evolution.length > 1 ? (
-				<Container title="Evolution" className="evolution-container">
-					<Row around="lg">
-						{pokemon.evolution.map((p, index) => (
-							<>
-								{index > 0 ? <Col>=></Col> : <></>}
-								<Col>
-									<a href={`/pokemon/${p.name}`} className="link-pokemon">
-										<img src={p.img_url} />
-										<br />
-										{p.name}
-									</a>
-								</Col>
-							</>
-						))}
+						<Col>
+							{pokemonSaved ? (
+								<ClickArea onClick={removePokemon}>
+									<Button>Remove</Button>
+								</ClickArea>
+							) : (
+								<ClickArea onClick={savePokemon}>
+									<Button>Save</Button>
+								</ClickArea>
+							)}
+						</Col>
 					</Row>
-				</Container>
+					<p>{pokemon.flavor_text}</p>
+					<Row top="lg">
+						<Col lg={4} md={4} sm={12}>
+							{pokemon.front_sprite ? (
+								<img
+									alt={`Front of ${pokemon.name}`}
+									src={pokemon.front_sprite}
+									className="pokemon-img"
+								/>
+							) : (
+								<></>
+							)}
+							{pokemon.back_sprite ? (
+								<img
+									alt={`Back of ${pokemon.name}`}
+									src={pokemon.back_sprite}
+									className="pokemon-img"
+								/>
+							) : (
+								<></>
+							)}
+							<Container title="Types" className="poke-container">
+								<ul>
+									{pokemon.types.map(type => (
+										<li>{type.name}</li>
+									))}
+								</ul>
+							</Container>
+
+							<Container title="Abilities" className="poke-container">
+								<ul>
+									{pokemon.abilities.map(ability => (
+										<li>{ability.name}</li>
+									))}
+								</ul>
+							</Container>
+						</Col>
+						<Col lg={8} md={5} sm={12}>
+							<Container title="Stats">
+								HP {pokemon.stats.hp}
+								<Progress value={pokemon.stats.hp} max={255} success />
+								Attack {pokemon.stats.attack}
+								<Progress value={pokemon.stats.attack} max={190} error />
+								Defense {pokemon.stats.defense}
+								<Progress value={pokemon.stats.defense} max={230} warning />
+								Special Attack {pokemon.stats.special_attack}
+								<Progress value={pokemon.stats.special_attack} max={194} error />
+								Special Defense {pokemon.stats.special_defense}
+								<Progress value={pokemon.stats.special_defense} max={230} warning />
+								Speed {pokemon.stats.speed}
+								<Progress value={pokemon.stats.speed} max={180} primary />
+							</Container>
+						</Col>
+					</Row>
+					{pokemon.evolution.length > 1 ? (
+						<Container title="Evolution" className="evolution-container">
+							<Row around="lg">
+								{pokemon.evolution.map((p, index) => (
+									<>
+										{index > 0 ? <Col>=></Col> : <></>}
+										<Col>
+											<a href={`/pokemon/${p.name}`} className="link-pokemon">
+												<img src={p.img_url} />
+												<br />
+												{p.name}
+											</a>
+										</Col>
+									</>
+								))}
+							</Row>
+						</Container>
+					) : (
+						<></>
+					)}
+				</div>
 			) : (
-				<></>
+				<h1>Loading...</h1>
 			)}
 		</>
 	);

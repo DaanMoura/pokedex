@@ -8,17 +8,18 @@ import { TextInput, Button, Container } from 'nes-react';
 
 import ClickArea from '../../components/ClickArea';
 import { fetchPokemons, fetchTypePokemons } from './requests';
+import { pokemonsQueries, filterQueries } from './columnsQueries';
 import FilterButton from './FilterButton';
 
 const PAGE_SIZE = 20;
 
-const Home = (props, { history }) => {
+const Home = ({ history, match }) => {
 	const [page, setPage] = useState(0);
 	const [pokemons, setPokemons] = useState([]);
 	const [search, setSearch] = useState('');
 	const [filterOpen, setFilterOpen] = useState(false);
 
-	const { type } = props.match.params;
+	const { type } = match.params;
 
 	const typeList = [
 		'normal',
@@ -55,13 +56,18 @@ const Home = (props, { history }) => {
 		loadPokemons();
 	}, [page]);
 
+	function changePage(p) {
+		setPokemons([]);
+		setPage(p);
+	}
+
 	function renderPageButton(isPrevious) {
 		const limit = Math.ceil(807 / PAGE_SIZE);
 		if (isPrevious) {
 			return page === 0 ? (
 				<></>
 			) : (
-				<ClickArea onClick={() => setPage(page - 1)}>
+				<ClickArea onClick={() => changePage(page - 1)}>
 					<Button> {'<'} </Button>
 				</ClickArea>
 			);
@@ -69,49 +75,16 @@ const Home = (props, { history }) => {
 			return page === limit ? (
 				<></>
 			) : (
-				<ClickArea onClick={() => setPage(page + 1)}>
+				<ClickArea onClick={() => changePage(page + 1)}>
 					<Button> {'>'} </Button>
 				</ClickArea>
 			);
 	}
 
 	const handleInput = e => setSearch(e.target.value);
-
 	const handleSearch = () => history.push(`/pokemon/${search}`);
-
 	const handleSaved = () => console.log('saved');
-
 	const openFilters = () => setFilterOpen(!filterOpen);
-
-	const queries = [
-		{
-			columns: 2,
-			query: 'min-width: 512px',
-		},
-		{
-			columns: 3,
-			query: 'min-width: 768px',
-		},
-		{
-			columns: 4,
-			query: 'min-width: 1024px',
-		},
-	];
-
-	const filterQueries = [
-		{
-			columns: 2,
-			query: 'min-width: 512px',
-		},
-		{
-			columns: 4,
-			query: 'min-width: 768px',
-		},
-		{
-			columns: 6,
-			query: 'min-width: 1024px',
-		},
-	];
 
 	return (
 		<>
@@ -163,7 +136,7 @@ const Home = (props, { history }) => {
 
 			{pokemons.length > 0 ? (
 				<div className="pokemons-container">
-					<Columns queries={queries}>
+					<Columns queries={pokemonsQueries}>
 						{pokemons.map((pokemon, index) => (
 							<Link to={`/pokemon/${pokemon.name}`} className="link-pokemon">
 								<Container centered title={pokemon.name} key={index} className="pokemon-card">
