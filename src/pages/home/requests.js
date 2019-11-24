@@ -36,7 +36,7 @@ async function fetchPokemons(page) {
         const response = await api.get(`/pokemon/${i}`);
         const data = response.data;
         pokemons.push({
-            id: i,
+            id: data['id'],
             name: data['name'],
             img_url: data['sprites']['front_default'],
         });

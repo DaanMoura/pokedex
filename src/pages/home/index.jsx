@@ -4,7 +4,7 @@ import './style.css';
 import Columns from 'react-columns';
 import { Row, Col } from 'react-flexbox-grid';
 import { Link } from 'react-router-dom';
-import { TextInput, Button, Container, Checkbox } from 'nes-react';
+import { TextInput, Button, Container } from 'nes-react';
 
 import ClickArea from '../../components/ClickArea';
 import { fetchPokemons, fetchTypePokemons } from './requests';
@@ -45,8 +45,8 @@ const Home = (props, { history }) => {
 		async function loadPokemons() {
 			console.log(type);
 
-			if(type) {
-				setPokemons(await fetchTypePokemons(type,page))
+			if (type) {
+				setPokemons(await fetchTypePokemons(type, page));
 			} else {
 				setPokemons(await fetchPokemons(page));
 			}
@@ -140,24 +140,42 @@ const Home = (props, { history }) => {
 			{filterOpen ? (
 				<Container title="Select a type">
 					<Columns queries={filterQueries}>
-						{typeList.map((type) => <FilterButton filter={type}/>)}
+						{typeList.map(type => (
+							<FilterButton filter={type} />
+						))}
 					</Columns>
 				</Container>
 			) : (
 				<></>
 			)}
 
-			<div className="pokemons-container">
-				<Columns queries={queries}>
-					{pokemons.map((pokemon, index) => (
-						<Link to={`/pokemon/${pokemon.id}`} className="link-pokemon">
-							<Container centered title={pokemon.name} key={index} className="pokemon-card">
-								<img src={pokemon.img_url} alt={`Imagem do ${pokemon.name}`} />
-							</Container>
-						</Link>
-					))}
-				</Columns>
+			<div className="subtitle">
+				{type ? (
+					<h2>
+						Showing <b>{type}</b> pokemons
+					</h2>
+				) : (
+					<h2>
+						Showing <b>all</b> pokemons
+					</h2>
+				)}
 			</div>
+
+			{pokemons.length > 0 ? (
+				<div className="pokemons-container">
+					<Columns queries={queries}>
+						{pokemons.map((pokemon, index) => (
+							<Link to={`/pokemon/${pokemon.name}`} className="link-pokemon">
+								<Container centered title={pokemon.name} key={index} className="pokemon-card">
+									<img src={pokemon.img_url} alt={`Imagem do ${pokemon.name}`} />
+								</Container>
+							</Link>
+						))}
+					</Columns>
+				</div>
+			) : (
+				<h2>Loading...</h2>
+			)}
 			<div className="row">
 				{renderPageButton(true)}
 				{page + 1}

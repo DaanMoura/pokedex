@@ -39,3 +39,11 @@
     margin-bottom: 1rem;
     width: 148px;
 }
+
+.subtitle {
+    margin-top: 1rem;
+}
+
+.subtitle b {
+    color: rgb(30, 79, 158);
+}

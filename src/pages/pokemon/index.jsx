@@ -86,7 +86,7 @@ const Pokemon = props => {
 							<>
 								{index > 0 ? <Col>=></Col> : <></>}
 								<Col>
-									<a href={`/pokemon/${p.id}`} className="link-pokemon">
+									<a href={`/pokemon/${p.name}`} className="link-pokemon">
 										<img src={p.img_url} />
 										<br />
 										{p.name}
