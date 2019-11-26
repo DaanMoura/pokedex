@@ -6,11 +6,9 @@ async function fetchPokemonSearch(search, page) {
     const response = await api.get('/pokemon', {
         params: { offset: 0, limit: 964, },
     });
+    console.log(search);
     const results = response.data.results;
-    console.log(results);
     const searchResults = results.filter((result) => result.name.includes(search.toLowerCase()));
-
-    console.log(searchResults);
 
     const pokemons = [];
     const begin = page * PAGE_SIZE;
@@ -25,7 +23,10 @@ async function fetchPokemonSearch(search, page) {
         });
     }
 
-    return pokemons;
+    return {
+        size: searchResults.length,
+        pokemons,
+    };
 }
 
 async function fetchTypePokemonList(type, page) {
@@ -52,7 +53,10 @@ async function fetchTypePokemons(type, page) {
     }
 
 
-    return pokemons;
+    return {
+        size: pokemon_list.length,
+        pokemons,
+    };
 }
 
 async function fetchPokemons(page) {

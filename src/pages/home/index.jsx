@@ -20,6 +20,7 @@ const Home = ({ history, match }) => {
 	const [searchInput, setSearchInput] = useState('');
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [strictSearch, setStrictSearch] = useState(false);
+	const [limit, setLimit] = useState(0);
 
 	const { type, search } = match.params;
 
@@ -47,10 +48,15 @@ const Home = ({ history, match }) => {
 	useEffect(() => {
 		async function loadPokemons() {
 			if (type) {
-				setPokemons(await fetchTypePokemons(type, page));
+				const result = await fetchTypePokemons(type, page);
+				setLimit(result.size);
+				setPokemons(result.pokemons);
 			} else if (search) {
-				setPokemons(await fetchPokemonSearch(search, page));
+				const result = await fetchPokemonSearch(search, page);
+				setLimit(result.size);
+				setPokemons(result.pokemons);
 			} else {
+				setLimit(807);
 				setPokemons(await fetchPokemons(page));
 			}
 		}
@@ -64,7 +70,8 @@ const Home = ({ history, match }) => {
 	}
 
 	function renderPageButton(isPrevious) {
-		const limit = Math.ceil(807 / PAGE_SIZE);
+		const pageLimit = Math.ceil(limit / PAGE_SIZE);
+		console.log(limit, pageLimit);
 		if (isPrevious) {
 			return page === 0 ? (
 				<></>
@@ -74,7 +81,7 @@ const Home = ({ history, match }) => {
 				</ClickArea>
 			);
 		} else
-			return page === limit ? (
+			return page + 1 === pageLimit ? (
 				<></>
 			) : (
 				<ClickArea onClick={() => changePage(page + 1)}>
@@ -103,7 +110,7 @@ const Home = ({ history, match }) => {
 						<Button>Search!</Button>
 					</a>
 				</Col>
-				<Col lg={1}/>
+				<Col lg={1} />
 				<Col>
 					<ClickArea onClick={openFilters}>
 						<Button>Filter</Button>
