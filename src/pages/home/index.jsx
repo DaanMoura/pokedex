@@ -98,8 +98,8 @@ const Home = ({ history, match }) => {
 
 	return (
 		<>
-			<Row top="sm" between="md">
-				<Col lg={5}>
+			<Row top="sm" between="lg" className="top">
+				<Col lg={5} md={12}>
 					<TextInput placeholder="Search for a pokémon" onChange={handleInput} />
 					<Checkbox
 						checked={strictSearch}
@@ -107,7 +107,7 @@ const Home = ({ history, match }) => {
 						onSelect={() => setStrictSearch(!strictSearch)}
 					/>
 				</Col>
-				<Col>
+				<Col lg={1} md={12}>
 					<a href={strictSearch ? `/pokemon/${searchInput}` : `/search/${searchInput}`}>
 						<Button>Search!</Button>
 					</a>

@@ -82,7 +82,7 @@ const Pokemon = props => {
 					</Row>
 					<p>{pokemon.flavor_text}</p>
 					<Row top="lg">
-						<Col lg={4} md={4} sm={12}>
+						<Col lg={4} md={12} sm={12}>
 							{pokemon.front_sprite ? (
 								<img
 									alt={`Front of ${pokemon.name}`}
@@ -117,7 +117,7 @@ const Pokemon = props => {
 								</ul>
 							</Container>
 						</Col>
-						<Col lg={8} md={5} sm={12}>
+						<Col lg={8} md={12} sm={12}>
 							<Container title="Stats">
 								HP {pokemon.stats.hp}
 								<Progress value={pokemon.stats.hp} max={255} success />
