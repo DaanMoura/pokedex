@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Container, Progress, Button } from 'nes-react';
 import { Row, Col } from 'react-flexbox-grid';
 
@@ -58,7 +57,9 @@ const Pokemon = props => {
 
 	return (
 		<>
-			{pokemon.id > 0 ? (
+			{pokemon.status == 'ERROR' ? (
+				<p>No results or something gone wrong :( </p>
+			) : pokemon.id > 0 ? (
 				<div>
 					<Row between="md">
 						<Col>

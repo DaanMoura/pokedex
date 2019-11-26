@@ -10,6 +10,12 @@ async function fetchPokemonSearch(search, page) {
     const results = response.data.results;
     const searchResults = results.filter((result) => result.name.includes(search.toLowerCase()));
 
+    if (searchResults.length == 0)
+        return {
+            size: 0,
+            pokemons: 0,
+        }
+
     const pokemons = [];
     const begin = page * PAGE_SIZE;
     for (let i = begin; i < (begin + PAGE_SIZE) && i < searchResults.length; i++) {

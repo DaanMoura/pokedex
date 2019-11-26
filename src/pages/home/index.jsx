@@ -21,6 +21,7 @@ const Home = ({ history, match }) => {
 	const [filterOpen, setFilterOpen] = useState(false);
 	const [strictSearch, setStrictSearch] = useState(false);
 	const [limit, setLimit] = useState(0);
+	const [isOk, setIsOk] = useState(true);
 
 	const { type, search } = match.params;
 
@@ -55,6 +56,7 @@ const Home = ({ history, match }) => {
 				const result = await fetchPokemonSearch(search, page);
 				setLimit(result.size);
 				setPokemons(result.pokemons);
+				if (pokemons.length == 0) setIsOk(false);
 			} else {
 				setLimit(807);
 				setPokemons(await fetchPokemons(page));
@@ -151,13 +153,18 @@ const Home = ({ history, match }) => {
 				)}
 			</div>
 
-			<PokemonsContainer pokemons={pokemons} />
-
-			<div className="row">
-				{renderPageButton(true)}
-				{page + 1}
-				{renderPageButton(false)}
-			</div>
+			{isOk ? (
+				<>
+					<PokemonsContainer pokemons={pokemons} />
+					<div className="row">
+						{renderPageButton(true)}
+						{page + 1}
+						{renderPageButton(false)}
+					</div>{' '}
+				</>
+			) : (
+				<p>No results</p>
+			)}
 		</>
 	);
 };
