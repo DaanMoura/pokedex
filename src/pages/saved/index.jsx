@@ -1,10 +1,6 @@
 import React, {useEffect,useState} from 'react'
-import { Link } from 'react-router-dom';
-import Columns from 'react-columns';
-import { Container } from 'nes-react';
 
 import '../../shared/style.css';
-import { pokemonsQueries } from '../../shared/columnsQueries';
 import PokemonsContainer from '../../components/PokemonsContainer';
 
 const Saved = () => {

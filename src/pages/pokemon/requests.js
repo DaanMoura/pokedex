@@ -3,30 +3,29 @@ import api from '../../services/api';
 async function fetchEvolution(url) {
     const response = await api.get(url);
     const chain = response.data['chain'];
-    const evolution_chain = [];
+    const evolutionChain = [];
 
-    evolution_chain.push(chain['species']['name']);
+    evolutionChain.push(chain['species']['name']);
 
     function getEvolutionChain(evolves_to) {
-        if (evolves_to[0]['evolves_to'].length == 0) {
-            evolution_chain.push(evolves_to[0]["species"]["name"]);
+        if (evolves_to[0]['evolves_to'].length === 0) {
+            evolutionChain.push(evolves_to[0]["species"]["name"]);
             return;
         };
 
-        evolution_chain.push(evolves_to[0]["species"]["name"]);
+        evolutionChain.push(evolves_to[0]["species"]["name"]);
         getEvolutionChain(evolves_to[0]['evolves_to']);
     }
 
     if (chain.evolves_to.length > 0) getEvolutionChain(chain.evolves_to);
-    return evolution_chain;
+    return evolutionChain;
 }
 
 async function fetchEvolutionPokemons(url) {
-    const evolution_chain = await fetchEvolution(url);
-    console.log(evolution_chain);
+    const evolutionChain = await fetchEvolution(url);
     const evolution_pokemons = [];
-    for (const i in evolution_chain) {
-        const response = await api.get(`/pokemon/${evolution_chain[i]}`);
+    for (const i in evolutionChain) {
+        const response = await api.get(`/pokemon/${evolutionChain[i]}`);
         const data = response.data;
         evolution_pokemons.push({
             id: data['id'],
@@ -46,7 +45,7 @@ async function fetchSpecie(name) {
     let flavor_text;
     for (let i in data['flavor_text_entries']) {
         const entrie = data['flavor_text_entries'][i]
-        if (entrie['language']['name'] == 'en') {
+        if (entrie['language']['name'] === 'en') {
             flavor_text = entrie['flavor_text'];
             break;
         }

@@ -56,7 +56,7 @@ const Home = ({ history, match }) => {
 				const result = await fetchPokemonSearch(search, page);
 				setLimit(result.size);
 				setPokemons(result.pokemons);
-				if (pokemons.length == 0) setIsOk(false);
+				if (result.size === 0) setIsOk(false);
 			} else {
 				setLimit(807);
 				setPokemons(await fetchPokemons(page));
@@ -64,7 +64,7 @@ const Home = ({ history, match }) => {
 		}
 
 		loadPokemons();
-	}, [page]);
+	}, [page, search, type]);
 
 	function changePage(p) {
 		setPokemons([]);
@@ -73,7 +73,6 @@ const Home = ({ history, match }) => {
 
 	function renderPageButton(isPrevious) {
 		const pageLimit = Math.ceil(limit / PAGE_SIZE);
-		console.log(limit, pageLimit);
 		if (isPrevious) {
 			return page === 0 ? (
 				<></>
@@ -140,7 +139,7 @@ const Home = ({ history, match }) => {
 			<div className="subtitle">
 				{type ? (
 					<h2>
-						Showing <b>{type}</b> pokemons
+						Showing <b>{type}</b> pokémons
 					</h2>
 				) : search ? (
 					<h2>
@@ -148,7 +147,7 @@ const Home = ({ history, match }) => {
 					</h2>
 				) : (
 					<h2>
-						Showing <b>all</b> pokemons
+						Showing <b>all</b> pokémons
 					</h2>
 				)}
 			</div>
@@ -160,7 +159,7 @@ const Home = ({ history, match }) => {
 						{renderPageButton(true)}
 						{page + 1}
 						{renderPageButton(false)}
-					</div>{' '}
+					</div>
 				</>
 			) : (
 				<p>No results</p>

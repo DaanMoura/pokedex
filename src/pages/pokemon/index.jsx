@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Progress, Button } from 'nes-react';
 import { Row, Col } from 'react-flexbox-grid';
+import MetaTags from 'react-meta-tags';
 
 import fetchPokemon from './requests';
 import './style.css';
@@ -29,7 +30,7 @@ const Pokemon = props => {
 			setPokemonSaved(localStorage.getItem(pokemon.name));
 		}
 		loadPokemon();
-	}, []);
+	}, [id]);
 
 	const savePokemon = () => {
 		localStorage.setItem(
@@ -50,17 +51,22 @@ const Pokemon = props => {
 		const saved_list_json = localStorage.getItem('saved_list');
 		let savedList = JSON.parse(saved_list_json);
 		if (savedList) {
-			savedList = savedList.filter(e => e != pokemon.name);
+			savedList = savedList.filter(e => e !== pokemon.name);
 			localStorage.setItem('saved_list', JSON.stringify(savedList));
 		}
 	};
 
 	return (
 		<>
-			{pokemon.status == 'ERROR' ? (
+			{pokemon.status === 'ERROR' ? (
 				<p>No results or something gone wrong :( </p>
 			) : pokemon.id > 0 ? (
 				<div>
+					<MetaTags>
+						<title>{pokemon.name} - Pokédex</title>
+						<meta name="description" content={pokemon.flavor_text}/>
+						<meta property="og:image" content={pokemon.front_sprite} />
+					</MetaTags>
 					<Row between="md">
 						<Col>
 							<h1>
@@ -142,7 +148,7 @@ const Pokemon = props => {
 										{index > 0 ? <Col>=></Col> : <></>}
 										<Col>
 											<a href={`/pokemon/${p.name}`} className="link-pokemon">
-												<img src={p.img_url} />
+												<img src={p.img_url} alt={`Front of ${p.name}`}/>
 												<br />
 												{p.name}
 											</a>

@@ -6,15 +6,16 @@ async function fetchPokemonSearch(search, page) {
     const response = await api.get('/pokemon', {
         params: { offset: 0, limit: 964, },
     });
-    console.log(search);
     const results = response.data.results;
     const searchResults = results.filter((result) => result.name.includes(search.toLowerCase()));
 
-    if (searchResults.length == 0)
+    console.log(searchResults);
+
+    if (searchResults.length === 0)
         return {
             size: 0,
             pokemons: 0,
-        }
+        };
 
     const pokemons = [];
     const begin = page * PAGE_SIZE;
@@ -35,21 +36,21 @@ async function fetchPokemonSearch(search, page) {
     };
 }
 
-async function fetchTypePokemonList(type, page) {
+async function fetchTypePokemonList(type) {
     const response = await api.get(`/type/${type}`);
-    const pokemons_data = response.data['pokemon'];
+    const pokemonsData = response.data['pokemon'];
 
-    const pokemon_list = pokemons_data.map((item) => item['pokemon']['name']);
+    const pokemonList = pokemonsData.map((item) => item['pokemon']['name']);
 
-    return pokemon_list;
+    return pokemonList;
 }
 
 async function fetchTypePokemons(type, page) {
-    const pokemon_list = await fetchTypePokemonList(type);
+    const pokemonList = await fetchTypePokemonList(type);
     const pokemons = [];
     const begin = page * PAGE_SIZE + 1;
     for (let i = begin; i < begin + PAGE_SIZE; i++) {
-        const response = await api.get(`/pokemon/${pokemon_list[i]}`);
+        const response = await api.get(`/pokemon/${pokemonList[i]}`);
         const data = response.data;
         pokemons.push({
             id: i,
@@ -60,7 +61,7 @@ async function fetchTypePokemons(type, page) {
 
 
     return {
-        size: pokemon_list.length,
+        size: pokemonList.length,
         pokemons,
     };
 }
