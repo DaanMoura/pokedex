@@ -1,11 +1,18 @@
 # React Pokédex
 
 A Pokédex website made in React (with a nice retro look).
-All information is given from [PokéAPI]()
+
+All information is given from [PokéAPI](https://pokeapi.co/).
 
 
 > Esse projeto é um teste do processo seletivo da Birdie
 
+### Vue.js version
+
+I started to recreate this project with Vue.js. Check out the repo below:
+
+[DaanMoura/pokedex-vue](https://github.com/DaanMoura/pokedex-vue)
+ 
 ## Getting Started
 
 Make sure you have [npm](https://www.npmjs.com/get-npm) or [yarn](https://yarnpkg.com/en/docs/getting-started) installed and follow these simple steps!
