@@ -7,6 +7,7 @@ import { pokemonsQueries } from '../../shared/columnsQueries';
 
 import './style.css';
 import '../../shared/style.css';
+import { normalize } from '../../shared/stringMethods';
 
 const PokemonsContainer = ({ pokemons }) =>
 	pokemons.length > 0 ? (
@@ -14,7 +15,7 @@ const PokemonsContainer = ({ pokemons }) =>
 			<Columns queries={pokemonsQueries}>
 				{pokemons.map((pokemon, index) => (
 					<Link to={`/pokemon/${pokemon.name}`} className="link-pokemon">
-						<Container centered title={pokemon.name} key={index} className="pokemon-card">
+						<Container centered title={normalize(pokemon.name)} key={index} className="pokemon-card">
 							{ pokemon.img_url ? <img src={pokemon.img_url} alt={`Front of ${pokemon.name}`} /> : <p>No picture</p>}
 						</Container>
 					</Link>

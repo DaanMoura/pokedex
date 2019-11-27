@@ -7,6 +7,7 @@ import fetchPokemon from './requests';
 import './style.css';
 import '../../shared/style.css';
 import ClickArea from '../../components/ClickArea';
+import { normalize } from '../../shared/stringMethods';
 
 const Pokemon = props => {
 	const { id } = props.match.params;
@@ -70,7 +71,7 @@ const Pokemon = props => {
 					<Row between="md">
 						<Col>
 							<h1>
-								#{pokemon.id} {pokemon.name}
+								#{pokemon.id} {normalize(pokemon.name)}
 							</h1>
 						</Col>
 
@@ -110,7 +111,7 @@ const Pokemon = props => {
 							<Container title="Types" className="poke-container">
 								<ul>
 									{pokemon.types.map(type => (
-										<li>{type.name}</li>
+										<li>{normalize(type.name)}</li>
 									))}
 								</ul>
 							</Container>
@@ -118,7 +119,7 @@ const Pokemon = props => {
 							<Container title="Abilities" className="poke-container">
 								<ul>
 									{pokemon.abilities.map(ability => (
-										<li>{ability.name}</li>
+										<li>{normalize(ability.name)}</li>
 									))}
 								</ul>
 							</Container>
@@ -150,7 +151,7 @@ const Pokemon = props => {
 											<a href={`/pokemon/${p.name}`} className="link-pokemon">
 												<img src={p.img_url} alt={`Front of ${p.name}`}/>
 												<br />
-												{p.name}
+												{normalize(p.name)}
 											</a>
 										</Col>
 									</>

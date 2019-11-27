@@ -91,7 +91,7 @@ const Home = ({ history, match }) => {
 			);
 	}
 
-	const handleInput = e => setSearchInput(e.target.value);
+	const handleInput = e => setSearchInput(e.target.value.toLowerCase());
 	const handleSaved = () => history.push(`/saved/`);
 	const openFilters = () => setFilterOpen(!filterOpen);
 
